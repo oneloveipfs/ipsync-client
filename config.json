@@ -1,3 +1,6 @@
 {
-    "socketioEndpoint": "http://192.168.1.7:3000/ipsync"
+    "socketioEndpoint": "https://uploader.oneloved.tube/ipsync",
+    "gateway": "https://video.oneloveipfs.com",
+    "hashtypes": ["videos","thumbnails","sprites","images","video240","video480","video720","video1080","subtitles"],
+    "users": []
 }

@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "ipfs-http-client": "^42.0.0",
     "socket.io-client": "^2.3.0"
   }
 }
