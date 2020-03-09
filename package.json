@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "ipfs-http-client": "^42.0.0",
-    "socket.io-client": "^2.3.0"
+    "socket.io-client": "^2.3.0",
+    "wget-improved": "^3.2.0"
   }
 }
