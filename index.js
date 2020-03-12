@@ -22,19 +22,27 @@ ipsync.on('upload',async (data) => {
         if (Config.hashtypes.includes('videos')) pinVideo(data.ipfshash,true)
         if (Config.hashtypes.includes('sprites') && data.spritehash) pinVideo(data.spritehash,true)
         if (Config.hashtypes.includes('thumbnails') && data.snaphash) pinVideo(data.snaphash,false)
+
+        // Non-resumable encoded video uploads
         if (Config.hashtypes.includes('video240') && data.ipfs240hash) pinVideo(data.ipfs240hash,true)
-        if (Config.hashtypes.includes('video480') && data.spritehash)  pinVideo(data.ipfs480hash,true)
-        if (Config.hashtypes.includes('video720') && data.spritehash) pinVideo(data.ipfs720hash,true)
-        if (Config.hashtypes.includes('video1080') && data.spritehash) pinVideo(data.ipfs1080hash,true) 
+        if (Config.hashtypes.includes('video480') && data.ipfs480hash)  pinVideo(data.ipfs480hash,true)
+        if (Config.hashtypes.includes('video720') && data.ipfs720hash) pinVideo(data.ipfs720hash,true)
+        if (Config.hashtypes.includes('video1080') && data.ipfs1080hash) pinVideo(data.ipfs1080hash,true) 
     } else if (data.imghash) {
         // image/thumbnail upload
         if (Config.hashtypes.includes('images') && data.imgtype === 'images')
             pinVideo(data.imghash,true)
         else if (Config.hashtypes.includes('thumbnails') && data.imgtype === 'thumbnails')
             pinVideo(data.imghash,false)
-    } else if (Config.hashtypes.includes('subtitles') && data.hash)
+    } else if (Config.hashtypes.includes('subtitles') && data.type === 'subtitles' && data.hash)
         // subtitle upload
         pinVideo(data.hash,false)
+
+    // Resumable encoded video uploads
+    if (Config.hashtypes.includes('video240') && data.type === 'video240' && data.hash) pinVideo(data.hash,true)
+    if (Config.hashtypes.includes('video480') && data.type === 'video480' && data.hash) pinVideo(data.hash,true)
+    if (Config.hashtypes.includes('video720') && data.type === 'video720' && data.hash) pinVideo(data.hash,true)
+    if (Config.hashtypes.includes('video1080') && data.type === 'video1080' && data.hash) pinVideo(data.hash,true)
 })
 
 function pinVideo(hash,trickle) {
