@@ -1,6 +1,7 @@
 const SocketIO = require('socket.io-client')
 const IPFSHttpClient = require('ipfs-http-client')
-const wget = require('wget-improved');
+const wget = require('wget-improved')
+const fs = require('fs')
 const Config = require('./config.json')
 
 const IPFS = IPFSHttpClient({ host: 'localhost', port: '5001', protocol: 'http'})
@@ -51,6 +52,7 @@ function pinVideo(hash,trickle) {
     download.on('end',async () => {
         for await (const file of IPFS.add(globSource(hash, { recursive: true }), { trickle: trickle })) {
             console.log('pinned ' + file.cid.toString() + ' recursively')
+            if (Config.deleteDownload) fs.unlink(hash,() => {})
         }
     })
 }
