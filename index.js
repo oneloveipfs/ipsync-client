@@ -18,6 +18,14 @@ ipsync.on('message',(message) => {
 ipsync.on('upload',async (data) => {
     console.log('received',data)
 
+    if (Config.users.length > 0) {
+        let isUser = false
+        for (let i in Config.users)
+            if (data.username == toUsername(Config.users[i]) && data.network == toNetwork(Config.users[i]))
+                isUser = true
+        if (!isUser) return
+    }
+
     if (data.ipfshash) {
         // video upload
         if (Config.hashtypes.includes('videos')) pinVideo(data.ipfshash,true)
@@ -55,4 +63,16 @@ function pinVideo(hash,trickle) {
             if (Config.deleteDownload) fs.unlink(hash,() => {})
         }
     })
+}
+
+function toUsername(fullusername) {
+    return fullusername.split('@')[0]
+}
+
+function toNetwork(fullusername) {
+    let parts = fullusername.split('@')
+    if (parts.length > 1)
+        return parts[1]
+    else
+        return 'all'
 }
