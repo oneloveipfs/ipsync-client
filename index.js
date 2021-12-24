@@ -4,8 +4,7 @@ const wget = require('wget-improved')
 const fs = require('fs')
 const Config = require('./config.json')
 
-const IPFS = IPFSHttpClient({ host: 'localhost', port: '5001', protocol: 'http'})
-const { globSource } = IPFSHttpClient
+const IPFS = IPFSHttpClient.create({ host: 'localhost', port: '5001', protocol: 'http'})
 
 if (Config.hashtypes.length === 0) console.log('Warning: selected hash types is empty, IPSync client will not pin any files.')
 
@@ -58,10 +57,11 @@ function pinVideo(hash,trickle) {
         console.log('File download begin (' + filesize + ')')
     })
     download.on('end',async () => {
-        for await (const file of IPFS.add(globSource(hash, { recursive: true }), { trickle: trickle })) {
-            console.log('pinned ' + file.cid.toString() + ' recursively')
-            if (Config.deleteDownload) fs.unlink(hash,() => {})
-        }
+        let readableStream = fs.createReadStream(hash)
+        let ipfsAdd = await IPFS.add(readableStream,{ trickle: trickle, cidVersion: 0 })
+        console.log('pinned ' + ipfsAdd.cid.toString() + ' recursively')
+        if (Config.deleteDownload)
+            fs.unlink(hash,() => {})
     })
 }
 
